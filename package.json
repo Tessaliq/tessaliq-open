@@ -1,0 +1,12 @@
+{
+  "name": "tessaliq-open",
+  "private": true,
+  "description": "Open-source components of the Tessaliq zero-knowledge identity verification platform",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
+  }
+}

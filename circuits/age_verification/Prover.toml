@@ -1,0 +1,12 @@
+# Private inputs (only the prover knows these)
+birth_year = 2000
+birth_month = 6
+birth_day = 15
+credential_hash_preimage = "12345"
+
+# Public inputs (visible to the verifier)
+current_year = 2026
+current_month = 3
+current_day = 29
+min_age = 18
+nonce = "99999"

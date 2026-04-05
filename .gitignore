@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+
+# Noir compiled artifacts (regenerate with `nargo compile`)
+circuits/*/target/
