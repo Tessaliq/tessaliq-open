@@ -265,7 +265,7 @@ export class Tessaliq {
   private async requestViaDigitalCredentials(requestUri: string): Promise<string | null> {
     try {
       const credential = await navigator.credentials.get({
-        // @ts-expect-error — DC API types not yet in TypeScript lib
+        // @ts-ignore — DC API types not yet in TypeScript lib
         digital: {
           requests: [{
             protocol: 'openid4vp',
@@ -277,7 +277,7 @@ export class Tessaliq {
       if (!credential) return null
 
       // The DC API returns the vp_token in the credential data
-      // @ts-expect-error — DC API response type
+      // @ts-ignore — DC API response type
       const data = credential.data ?? credential.response
       if (typeof data === 'string') return data
       if (data && typeof data === 'object') {

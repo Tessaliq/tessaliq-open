@@ -15,6 +15,7 @@
     "jose": "^5.0.0"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "vitest": "^2.0.0"
   }
 }
