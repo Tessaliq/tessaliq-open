@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  circuits:
+    name: Noir circuits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Noir 0.36.0
+        run: |
+          curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
+          echo "$HOME/.nargo/bin" >> $GITHUB_PATH
+
+      - name: Install nargo 0.36.0
+        run: noirup -v 0.36.0
+
+      - name: Run circuit tests
+        working-directory: circuits/age_verification
+        run: nargo test
+
+  typescript:
+    name: TypeScript packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm -r test
