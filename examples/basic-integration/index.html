@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tessaliq — Basic Integration Example</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+    h1 { font-size: 1.5rem; margin-bottom: 8px; }
+    p.subtitle { color: #666; margin-bottom: 32px; }
+    .card { border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    button { background: #1a1a1a; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; width: 100%; }
+    button:hover { background: #333; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .status { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 0.9rem; display: none; }
+    .status.visible { display: block; }
+    .status.success { background: #e8f5e9; color: #2e7d32; }
+    .status.error { background: #fbe9e7; color: #c62828; }
+    .status.pending { background: #e3f2fd; color: #1565c0; }
+    .methods { display: flex; gap: 8px; margin-bottom: 16px; }
+    .methods button { flex: 1; background: white; color: #1a1a1a; border: 1px solid #e0e0e0; }
+    .methods button.active { background: #1a1a1a; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Tessaliq Integration Example</h1>
+  <p class="subtitle">Zero-knowledge age verification — the date of birth never leaves your browser.</p>
+
+  <div class="card">
+    <h2 style="font-size: 1.1rem; margin-bottom: 16px;">Verify your age</h2>
+
+    <div class="methods">
+      <button id="btn-zk" class="active" onclick="setMethod('zk')">ZK Proof</button>
+      <button id="btn-wallet" onclick="setMethod('wallet')">EUDI Wallet</button>
+    </div>
+
+    <button id="verify-btn" onclick="verify()">Verify age (18+)</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <div class="card" style="font-size: 0.85rem; color: #666;">
+    <strong>How it works:</strong>
+    <ol style="margin-top: 8px; padding-left: 20px; line-height: 1.6;">
+      <li>The SDK creates a verification session with the Tessaliq API</li>
+      <li>Your date of birth is used to generate a ZK proof <em>locally in your browser</em></li>
+      <li>Only the proof (not your DOB) is sent to the server for verification</li>
+      <li>The server confirms: "this person is 18+" — nothing more</li>
+    </ol>
+  </div>
+
+  <!-- In production, use the npm package: import { Tessaliq } from '@tessaliq/sdk-web' -->
+  <script type="module">
+    // import Tessaliq from '@tessaliq/sdk-web'
+
+    let method = 'zk'
+
+    window.setMethod = (m) => {
+      method = m
+      document.getElementById('btn-zk').className = m === 'zk' ? 'active' : ''
+      document.getElementById('btn-wallet').className = m === 'wallet' ? 'active' : ''
+    }
+
+    function showStatus(text, type) {
+      const el = document.getElementById('status')
+      el.textContent = text
+      el.className = `status visible ${type}`
+    }
+
+    window.verify = async () => {
+      const btn = document.getElementById('verify-btn')
+      btn.disabled = true
+
+      try {
+        showStatus('Initializing...', 'pending')
+
+        // Initialize the SDK
+        // const tessaliq = Tessaliq.init({
+        //   apiKey: 'your-api-key',
+        //   baseUrl: 'https://api.tessaliq.com',
+        //   onStateChange: (state) => showStatus(`State: ${state}`, 'pending'),
+        // })
+
+        if (method === 'zk') {
+          // Direct ZK proof — for demo/testing
+          // In production, the date of birth comes from the wallet credential
+          showStatus('Generating ZK proof in browser...', 'pending')
+
+          // const result = await tessaliq.verify({
+          //   birthYear: 1995,
+          //   birthMonth: 8,
+          //   birthDay: 22,
+          // })
+
+          // Simulated result for this example
+          await new Promise(r => setTimeout(r, 1500))
+          const result = { verified: true, sessionId: 'demo-session' }
+
+          if (result.verified) {
+            showStatus('Age verified! The server confirmed: this person is 18+. No date of birth was transmitted.', 'success')
+          } else {
+            showStatus('Verification failed.', 'error')
+          }
+        } else {
+          // Wallet-based verification (EUDI Wallet)
+          showStatus('Requesting credential from EUDI Wallet...', 'pending')
+
+          // const result = await tessaliq.verifyWithWallet()
+
+          await new Promise(r => setTimeout(r, 1500))
+          showStatus('EUDI Wallet integration requires a compatible browser and wallet app. See README for setup.', 'pending')
+        }
+      } catch (err) {
+        showStatus(`Error: ${err.message}`, 'error')
+      } finally {
+        btn.disabled = false
+      }
+    }
+  </script>
+</body>
+</html>
