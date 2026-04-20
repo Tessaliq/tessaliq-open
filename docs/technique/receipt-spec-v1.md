@@ -16,9 +16,9 @@ related:
 
 Ce document spécifie le format et les invariants du **receipt JWT** émis par Tessaliq à l'issue de chaque vérification d'un credential EUDI (mdoc ISO 18013-5 ou SD-JWT-VC). Le receipt est conçu pour être **vérifié par un tiers indépendant** (auditeur, régulateur, ou RP) **sans coordination avec Tessaliq** — la vérification cryptographique repose uniquement sur la clé publique exposée via le endpoint JWKS standard (public, non authentifié, cacheable).
 
-La spec documente le comportement **actuel** du code (packages/api/src/lib/receipt-signer.ts) au 2026-04-20. Les limitations connues sont listées en §9. Une lib tierce `@tessaliq/receipt-verifier` (MIT) est en cours de préparation (cf. issue #135) pour encapsuler la procédure de vérification.
+La spec documente le comportement **actuel** du code (packages/api/src/lib/receipt-signer.ts) au 2026-04-20. Les limitations connues sont listées en §9. Une lib tierce [`@tessaliq/receipt-verifier`](https://github.com/Tessaliq/tessaliq-open/tree/main/packages/receipt-verifier) (MIT, v0.1.0-draft) encapsule la procédure de vérification et est publiée dans `tessaliq-open`.
 
-> **Audience** : ce document est technique. Pour une présentation grand public des garanties apportées par le receipt, voir `/receipt` (à venir) sur le site Tessaliq.
+> **Audience** : ce document est technique. Pour une présentation grand public des garanties apportées par le receipt, voir [`/receipt/verify`](https://tessaliq.com/receipt/verify) sur le site Tessaliq (page interactive de vérification).
 
 ---
 
@@ -430,9 +430,9 @@ Un endpoint `POST /v1/receipts/verify` côté Tessaliq permet de valider qu'un r
 
 Éléments envisagés (non engagés) pour versions futures, à discuter avec la communauté :
 
-- **v1.1** : publication `@tessaliq/receipt-verifier` (MIT) avec CLI + SDK TypeScript/Node + browser
-- **v1.2** : endpoint public de lookup par fingerprint pour confirmer l'existence DB (anonyme, rate-limited) — optionnel, le receipt reste cryptographiquement vérifiable sans
-- **v1.3** : propagation `assurance_level` réelle quand le wallet l'expose de bout en bout
+- **v1.0** (tag après validation E2E vrai) : stabilisation `@tessaliq/receipt-verifier` — CI GitHub Actions, CHANGELOG, examples étoffés (premier receipt issu d'un vrai wallet EUDI via Playground France Identité ou EU AV app pilote), retrait du suffix `-draft` de la spec et de la lib
+- **v1.1** : endpoint public de lookup par fingerprint pour confirmer l'existence DB (anonyme, rate-limited) — optionnel, le receipt reste cryptographiquement vérifiable sans
+- **v1.2** : propagation `assurance_level` réelle quand le wallet l'expose de bout en bout
 - **v2** : rotation de `kid` quand nécessaire (compromission suspectée, changement d'algo — ex. ML-DSA post-quantique)
 - **v2+** : schéma de révocation si un cas d'usage le justifie (ex. receipts signés avant une vulnérabilité détectée côté circuit ZK)
 

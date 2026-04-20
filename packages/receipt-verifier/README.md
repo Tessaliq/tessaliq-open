@@ -14,12 +14,26 @@ The library **never calls an authenticated Tessaliq endpoint**. The only network
 
 ## Install
 
+Not yet published to npm (project policy, tied to incorporation timeline). Install via a git dependency or by cloning and linking locally:
+
 ```bash
-pnpm add @tessaliq/receipt-verifier
-# or npm install / yarn add
+# Option 1 — git dependency (simplest)
+pnpm add "github:Tessaliq/tessaliq-open#main"
+# Note: you will depend on the whole monorepo; pick the package via workspace features if your setup supports it.
+
+# Option 2 — clone + build + link (fully reproducible)
+git clone https://github.com/Tessaliq/tessaliq-open.git
+cd tessaliq-open
+pnpm install
+pnpm -F @tessaliq/receipt-verifier build
+pnpm -F @tessaliq/receipt-verifier link --global
+# then, in your own project:
+pnpm link --global @tessaliq/receipt-verifier
 ```
 
 Requires Node.js ≥ 20.
+
+An npm release is planned once the library reaches v1.0 — see the v1.0 trigger conditions in the README's "Status" section.
 
 ## Usage — library
 
