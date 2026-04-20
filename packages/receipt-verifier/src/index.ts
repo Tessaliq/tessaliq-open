@@ -1,4 +1,5 @@
-// @tessaliq/receipt-verifier — verify Tessaliq receipt JWTs offline.
+// @tessaliq/receipt-verifier — verify Tessaliq receipt JWTs yourself,
+// with just the public JWKS. Air-gapped use supported via the `jwks` option.
 // Spec: docs/technique/receipt-spec-v1.md
 // License: MIT
 
@@ -88,9 +89,10 @@ const EXPECTED_ALG = 'ES256'
 /**
  * Verify a Tessaliq receipt JWT.
  *
- * The verification is fully cryptographic and does not require access to the
- * Tessaliq API (only the public JWKS endpoint is fetched, and you can skip
- * that too by pre-fetching the JWKS and passing it via options.jwks).
+ * The verification is fully cryptographic and does not require an
+ * authenticated call to Tessaliq. Only the public JWKS endpoint is read
+ * (unauthenticated, cacheable), and you can skip even that by pre-fetching
+ * the JWKS and passing it via options.jwks for fully air-gapped use.
  *
  * A successful result proves:
  *  - The JWT was signed with the Tessaliq private key whose public counterpart

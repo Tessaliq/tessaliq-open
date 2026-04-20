@@ -1,7 +1,7 @@
 {
   "name": "@tessaliq/receipt-verifier",
   "version": "0.1.0-draft",
-  "description": "Verify Tessaliq receipt JWTs cryptographically, offline, without calling the Tessaliq API. MIT-licensed.",
+  "description": "Verify Tessaliq receipt JWTs cryptographically yourself, with just the public JWKS — no coordination with Tessaliq required. MIT-licensed.",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",

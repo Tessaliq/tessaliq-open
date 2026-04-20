@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verify a Tessaliq receipt — browser example</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    h1 { font-size: 1.4rem; }
+    textarea { width: 100%; padding: 0.5rem; font-family: ui-monospace, monospace; font-size: 0.85rem; min-height: 140px; box-sizing: border-box; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; }
+    .result { margin-top: 1rem; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; background: #fafafa; }
+    .ok { border-color: #2F7D4E; background: #EEF7F1; }
+    .ko { border-color: #B94A3B; background: #FBEFEC; }
+    pre { white-space: pre-wrap; word-break: break-word; font-size: 0.8rem; }
+    .meta { color: #666; font-size: 0.85rem; }
+    code { background: #eee; padding: 0 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Verify a Tessaliq receipt</h1>
+  <p class="meta">
+    This page loads <code>jose</code> from a CDN and runs the verification
+    entirely in your browser. The only outbound request is to the Tessaliq
+    JWKS endpoint configured below.
+  </p>
+
+  <label>
+    Target environment<br>
+    <select id="target">
+      <option value="prod" selected>Production — api.tessaliq.com</option>
+      <option value="staging">Staging — api-staging.tessaliq.com</option>
+    </select>
+  </label>
+
+  <p><label>
+    Paste a receipt JWT:<br>
+    <textarea id="jwt" spellcheck="false" autocomplete="off" placeholder="eyJhbGciOiJFUzI1NiIs…"></textarea>
+  </label></p>
+
+  <button id="verify">Verify</button>
+
+  <div id="result" class="result" hidden></div>
+
+  <script type="module">
+    import { jwtVerify, createRemoteJWKSet, errors } from 'https://esm.sh/jose@5.9.6'
+
+    const PROD = { jwks: 'https://api.tessaliq.com/.well-known/jwks.json', issuer: 'https://api.tessaliq.com' }
+    const STAGING = { jwks: 'https://api-staging.tessaliq.com/.well-known/jwks.json', issuer: 'https://api-staging.tessaliq.com' }
+    const cache = new Map()
+    const getJwks = (url) => {
+      if (!cache.has(url)) cache.set(url, createRemoteJWKSet(new URL(url)))
+      return cache.get(url)
+    }
+
+    const $jwt = document.getElementById('jwt')
+    const $target = document.getElementById('target')
+    const $result = document.getElementById('result')
+
+    document.getElementById('verify').addEventListener('click', async () => {
+      const jwt = $jwt.value.trim()
+      $result.hidden = false
+      $result.classList.remove('ok', 'ko')
+      if (!jwt) {
+        $result.classList.add('ko')
+        $result.innerHTML = '<strong>No input</strong> — paste a receipt JWT first.'
+        return
+      }
+
+      const target = $target.value === 'staging' ? STAGING : PROD
+      $result.innerHTML = 'Verifying…'
+      try {
+        const { payload, protectedHeader } = await jwtVerify(jwt, getJwks(target.jwks), {
+          issuer: target.issuer,
+          algorithms: ['ES256'],
+          typ: 'tessaliq-receipt+jwt',
+        })
+        $result.classList.add('ok')
+        $result.innerHTML = `
+          <strong>✓ Receipt is valid</strong>
+          <pre>${JSON.stringify({ header: protectedHeader, claims: payload }, null, 2)}</pre>`
+      } catch (err) {
+        $result.classList.add('ko')
+        let why = 'unknown'
+        if (err instanceof errors.JWSSignatureVerificationFailed) why = 'invalid signature'
+        else if (err instanceof errors.JOSEAlgNotAllowed) why = 'invalid algorithm'
+        else if (err instanceof errors.JWTClaimValidationFailed && err.claim === 'iss') why = 'issuer mismatch for the selected environment'
+        $result.innerHTML = `<strong>✗ Invalid</strong> — ${why}<br><code>${(err.message || err.code || '').toString()}</code>`
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # @tessaliq/receipt-verifier
 
-Verify Tessaliq receipt JWTs cryptographically, **offline, without calling the Tessaliq API**. MIT-licensed.
+Verify Tessaliq receipt JWTs cryptographically **yourself** — with just the public JWKS, no coordination with Tessaliq required. MIT-licensed.
 
 Tessaliq is an EUDI Wallet verifier that emits a signed JWT receipt after every verification. This library lets any third party — an auditor, a Relying Party, a regulator, a curious developer — check that a given receipt is authentic and has not been tampered with, using only the public JWKS published by Tessaliq.
 
@@ -10,7 +10,7 @@ Tessaliq is an EUDI Wallet verifier that emits a signed JWT receipt after every 
 
 A Tessaliq receipt is meant to be an **audit artifact**, not an opaque boolean. When a regulator (ARCOM, CNIL) or an auditor asks a Relying Party for proof that a given age verification was performed correctly, the RP hands over the receipt JWT. Without this library, the auditor would have to reimplement JWS verification against the Tessaliq JWKS. With it, the check is three lines of code.
 
-The library **never calls the Tessaliq API**. The only network request it performs (optional) is to the public `.well-known/jwks.json` endpoint to fetch the signing key. You can also pre-fetch the JWKS and pass it as an option for a fully offline verification (useful for air-gapped audits).
+The library **never calls an authenticated Tessaliq endpoint**. The only network request it performs is to the public, unauthenticated `.well-known/jwks.json` endpoint to fetch the signing key. You can also pre-fetch the JWKS and pass it via the `jwks` option for fully air-gapped verification (useful for auditors operating on a detached network).
 
 ## Install
 
@@ -80,10 +80,19 @@ It does **not** prove:
 
 See [spec §8 — Garanties apportées par le receipt](https://github.com/Tessaliq/tessaliq-open/blob/main/docs/technique/receipt-spec-v1.md#8-garanties-apportées-par-le-receipt) for the full scope of guarantees.
 
+## Examples
+
+See [`examples/receipt-verifier/`](https://github.com/Tessaliq/tessaliq-open/tree/main/examples/receipt-verifier) for runnable snippets:
+
+- `cli-example.sh` — shell wrapper around the CLI
+- `node-example.mjs` — Node.js script with a local round-trip (generate key → sign → verify, no network) plus a production pattern that verifies a receipt from disk against the live JWKS
+- `browser-example.html` — standalone HTML that loads `jose` from a CDN and verifies a pasted JWT entirely client-side
+
 ## Related
 
 - **Tessaliq** — EUDI Wallet verifier. [https://tessaliq.com](https://tessaliq.com)
 - **Spec** — [docs/technique/receipt-spec-v1.md](https://github.com/Tessaliq/tessaliq-open/blob/main/docs/technique/receipt-spec-v1.md)
+- **Interactive page** — [tessaliq.com/receipt/verify](https://tessaliq.com/receipt/verify) (the same verification, in your browser)
 - **Public key (JWKS)** — [https://api.tessaliq.com/.well-known/jwks.json](https://api.tessaliq.com/.well-known/jwks.json)
 - **OIDF conformance plans** — [plan-detail links](https://demo.certification.openid.net/)
 
