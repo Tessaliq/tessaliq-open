@@ -4,7 +4,7 @@ Verify Tessaliq receipt JWTs cryptographically **yourself** — with just the pu
 
 Tessaliq is an EUDI Wallet verifier that emits a signed JWT receipt after every verification. This library lets any third party — an auditor, a Relying Party, a regulator, a curious developer — check that a given receipt is authentic and has not been tampered with, using only the public JWKS published by Tessaliq.
 
-> **Status** : v0.1.0-draft. The spec is being stabilised (see [docs/technique/receipt-spec-v1.md](https://github.com/Tessaliq/tessaliq-open/blob/main/docs/technique/receipt-spec-v1.md)). API may evolve before v1.0. Not yet published to npm (cf. project policy).
+> **Status** : v1.0.0 (2026-05-13). Spec v1.0 — [docs/technique/receipt-spec-v1.md](https://github.com/Tessaliq/tessaliq-open/blob/main/docs/technique/receipt-spec-v1.md). The promotion gate (verify a receipt issued via a real EUDI Wallet flow end-to-end with this library) is met by [`examples/real-receipt.json`](./examples/real-receipt.json), a real receipt minted on 2026-05-13 by the Tessaliq verifier against the open-source [`Tessaliq/mock-wallet`](https://github.com/Tessaliq/mock-wallet) OID4VP `direct_post` flow. npm publication tracked separately.
 
 ## Why this exists
 
@@ -14,7 +14,7 @@ The library **never calls an authenticated Tessaliq endpoint**. The only network
 
 ## Install
 
-Not yet published to npm (project policy, tied to incorporation timeline). Install via a git dependency or by cloning and linking locally:
+Not yet published to npm (publication under the `@tessaliq` org tracked separately). Install via a git dependency or by cloning and linking locally:
 
 ```bash
 # Option 1 — git dependency (simplest)
@@ -32,8 +32,6 @@ pnpm link --global @tessaliq/receipt-verifier
 ```
 
 Requires Node.js ≥ 20.
-
-An npm release is planned once the library reaches v1.0 — see the v1.0 trigger conditions in the README's "Status" section.
 
 ## Usage — library
 

@@ -1,7 +1,7 @@
 ---
 title: Tessaliq Receipt JWT — spécification v1
-status: spec en cours de stabilisation
-version: v1.0-draft (2026-04-20)
+status: stable
+version: v1.0 (2026-05-13)
 audience: dev tiers, auditeurs, DPO, régulateurs
 issue: #135
 related:
@@ -16,7 +16,7 @@ related:
 
 Ce document spécifie le format et les invariants du **receipt JWT** émis par Tessaliq à l'issue de chaque vérification d'un credential EUDI (mdoc ISO 18013-5 ou SD-JWT-VC). Le receipt est conçu pour être **vérifié par un tiers indépendant** (auditeur, régulateur, ou RP) **sans coordination avec Tessaliq** — la vérification cryptographique repose uniquement sur la clé publique exposée via le endpoint JWKS standard (public, non authentifié, cacheable).
 
-La spec documente le comportement **actuel** du code (packages/api/src/lib/receipt-signer.ts) au 2026-04-20. Les limitations connues sont listées en §9. Une lib tierce [`@tessaliq/receipt-verifier`](https://github.com/Tessaliq/tessaliq-open/tree/main/packages/receipt-verifier) (MIT, v0.1.0-draft) encapsule la procédure de vérification et est publiée dans `tessaliq-open`.
+La spec documente le comportement **actuel** du code (packages/api/src/lib/receipt-signer.ts). Les limitations connues sont listées en §9. Une lib tierce [`@tessaliq/receipt-verifier`](https://github.com/Tessaliq/tessaliq-open/tree/main/packages/receipt-verifier) (MIT, v1.0.0) encapsule la procédure de vérification et est publiée dans `tessaliq-open`. Un exemple complet (receipt réel + snapshot JWKS) est embarqué dans la lib via `examples/real-receipt.json` et exercé par le test `__tests__/real-receipt.test.ts`.
 
 > **Audience** : ce document est technique. Pour une présentation grand public des garanties apportées par le receipt, voir [`/receipt/verify`](https://tessaliq.com/receipt/verify) sur le site Tessaliq (page interactive de vérification).
 
@@ -325,7 +325,7 @@ Toute erreur de signature, d'algorithme ou d'issuer lèvera une exception. La fo
 
 ### 6.3 Librairie `@tessaliq/receipt-verifier` (à venir)
 
-Une lib MIT encapsulant cette procédure avec types TypeScript, CLI et exemples d'intégration est publiée dans `Tessaliq/tessaliq-open/packages/receipt-verifier` (v0.1.0-draft au 2026-04-20). Elle lit par défaut le JWKS public, et accepte un JWKS pré-fetché via l'option `jwks` pour une vérification totalement air-gapped.
+Une lib MIT encapsulant cette procédure avec types TypeScript, CLI et exemples d'intégration est publiée dans `Tessaliq/tessaliq-open/packages/receipt-verifier` (v1.0.0). Elle lit par défaut le JWKS public, et accepte un JWKS pré-fetché via l'option `jwks` pour une vérification totalement air-gapped. Un exemple complet — receipt réel + snapshot JWKS contemporain — est embarqué dans `examples/real-receipt.json` et exercé par `__tests__/real-receipt.test.ts`.
 
 ---
 
@@ -430,7 +430,6 @@ Un endpoint `POST /v1/receipts/verify` côté Tessaliq permet de valider qu'un r
 
 Éléments envisagés (non engagés) pour versions futures, à discuter avec la communauté :
 
-- **v1.0** (tag après validation E2E vrai) : stabilisation `@tessaliq/receipt-verifier` — CI GitHub Actions, CHANGELOG, examples étoffés (premier receipt issu d'un vrai wallet EUDI via Playground France Identité ou EU AV app pilote), retrait du suffix `-draft` de la spec et de la lib
 - **v1.1** : endpoint public de lookup par fingerprint pour confirmer l'existence DB (anonyme, rate-limited) — optionnel, le receipt reste cryptographiquement vérifiable sans
 - **v1.2** : propagation `assurance_level` réelle quand le wallet l'expose de bout en bout
 - **v2** : rotation de `kid` quand nécessaire (compromission suspectée, changement d'algo — ex. ML-DSA post-quantique)
@@ -454,7 +453,8 @@ Les évolutions suivront SemVer côté schéma : un ajout de claim rétrocompati
 
 ## 12. Historique
 
-- **v1.0-draft — 2026-04-20** : rédaction initiale de la spec sur base du code `packages/api/src/lib/receipt-signer.ts` au commit `16a6cc18`. Issue de tracking : #135. Première version destinée à une publication publique — pas encore gelée, en attente de revue Olivier + éventuelle revue tiers (ex. OWF, DIF).
+- **v1.0 — 2026-05-13** : stabilisation. Le gate "vrai receipt issu d'un wallet EUDI vérifié end-to-end" est levé par la livraison de [`Tessaliq/mock-wallet`](https://github.com/Tessaliq/mock-wallet) (MIT) qui mint des receipts contre le verifier Tessaliq via OID4VP `direct_post` profile `eu_av_blueprint`. Un receipt réel + le snapshot JWKS associé sont embarqués dans `packages/receipt-verifier/examples/real-receipt.json` et exercés par le test air-gapped `__tests__/real-receipt.test.ts`. Retrait du suffix `-draft` sur la spec et la lib.
+- **v1.0-draft — 2026-04-20** : rédaction initiale de la spec sur base du code `packages/api/src/lib/receipt-signer.ts` au commit `16a6cc18`. Issue de tracking : #135. Première version destinée à une publication publique.
 
 ## À vérifier avant publication externe
 

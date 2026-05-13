@@ -1,0 +1,64 @@
+{
+  "fetched_at": "2026-05-13T19:08:13.650Z",
+  "notes": [
+    "Real receipt minted by Tessaliq staging (api-staging.tessaliq.com) on 2026-05-13.",
+    "The credential was issued by the Tessaliq issuer (Reusable AV mdoc, eu.europa.ec.av.1),",
+    "presented via the Tessaliq/mock-wallet OID4VP direct_post flow (eu_av_blueprint profile),",
+    "verified by the Tessaliq verifier, and the receipt JWT was signed by the staging receipt key.",
+    "The JWKS bundled alongside is the snapshot at signing time — use it via the `jwks` option of",
+    "the lib's verifyReceipt() for fully air-gapped reproducible verification."
+  ],
+  "receipt_jwt": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3NhbGlxLXJlY2VpcHQtdjEiLCJ0eXAiOiJ0ZXNzYWxpcS1yZWNlaXB0K2p3dCJ9.eyJzZXNzaW9uX2lkIjoiMzQzMGJkNTMtOGMxOS00ZDA2LThiMTQtMDU2YWNhNjFkMDdiIiwib3JnYW5pemF0aW9uX2lkIjoiMzcyOGZhNTQtNmM3MC00YTYwLThhNjMtODdiMWRhNTUxNGI1IiwidmVyaWZpY2F0aW9uIjp7InBvbGljeSI6ImF2X2FnZV8xOF9wbHVzIiwicG9saWN5X3ZlcnNpb24iOjEsInJlc3VsdCI6dHJ1ZSwic3RhdGUiOiJ2ZXJpZmllZCIsImNyZWF0ZWRfYXQiOiIyMDI2LTA1LTEzVDE5OjA4OjEyLjU1M1oiLCJjb21wbGV0ZWRfYXQiOiIyMDI2LTA1LTEzVDE5OjA4OjEzLjc0NloiLCJhc3N1cmFuY2VfbGV2ZWwiOiJ1bmtub3duIn0sInByb29mIjpudWxsLCJkcHYiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93M2lkLm9yZy9kcHYjIiwiaHR0cHM6Ly93M2lkLm9yZy9kcHYvZHB2LWdkcHIjIiwieHNkOmh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIyJdLCJAdHlwZSI6ImRwdjpQZXJzb25hbERhdGFIYW5kbGluZyIsImRwdjpoYXNQdXJwb3NlIjp7IkBpZCI6ImRwdjpBZ2VWZXJpZmljYXRpb24ifSwiZHB2Omhhc0xlZ2FsQmFzaXMiOnsiQGlkIjoiZHB2LWdkcHI6TGVnYWxPYmxpZ2F0aW9uIn0sImRwdjpoYXNEYXRhUmV0ZW50aW9uUGVyaW9kIjp7IkB2YWx1ZSI6IlAwRCIsIkB0eXBlIjoieHNkOmR1cmF0aW9uIn0sImRwdjpoYXNEYXRhQ29udHJvbGxlciI6eyJAaWQiOiJodHRwczovL2FwaS1zdGFnaW5nLnRlc3NhbGlxLmNvbSJ9LCJkcHY6aGFzUHJvY2Vzc2luZ0NvbnRleHQiOiJldS5ldXJvcGEuZWMuZWlkYXMyLnZlcmlmaWVyIn0sImlzcyI6Imh0dHBzOi8vYXBpLnRlc3NhbGlxLmNvbSIsImlhdCI6MTc3ODY5OTI5NCwianRpIjoiMzQzMGJkNTMtOGMxOS00ZDA2LThiMTQtMDU2YWNhNjFkMDdiIn0.c0EpV8DET3mLx4uA--F-LILWOywIjkqRwmk_p2DnYTmu24Qm6pd4SmuU3G9LTm_1HQis3FdGri2fU9eDyAOFkA",
+  "jwks": {
+    "keys": [
+      {
+        "kty": "EC",
+        "x": "Lzf9vhwTNgJzldJ0vbn3sZgTKsyInEvcldcJpUhVCZs",
+        "y": "6IQsMBkle-TCzp5okFQ0XAjQXXISPzLuAd6h3hhVuys",
+        "crv": "P-256",
+        "kid": "tessaliq-receipt-v1",
+        "use": "sig",
+        "alg": "ES256"
+      }
+    ]
+  },
+  "decoded_payload": {
+    "session_id": "3430bd53-8c19-4d06-8b14-056aca61d07b",
+    "organization_id": "3728fa54-6c70-4a60-8a63-87b1da5514b5",
+    "verification": {
+      "policy": "av_age_18_plus",
+      "policy_version": 1,
+      "result": true,
+      "state": "verified",
+      "created_at": "2026-05-13T19:08:12.553Z",
+      "completed_at": "2026-05-13T19:08:13.746Z",
+      "assurance_level": "unknown"
+    },
+    "proof": null,
+    "dpv": {
+      "@context": [
+        "https://w3id.org/dpv#",
+        "https://w3id.org/dpv/dpv-gdpr#",
+        "xsd:http://www.w3.org/2001/XMLSchema#"
+      ],
+      "@type": "dpv:PersonalDataHandling",
+      "dpv:hasPurpose": {
+        "@id": "dpv:AgeVerification"
+      },
+      "dpv:hasLegalBasis": {
+        "@id": "dpv-gdpr:LegalObligation"
+      },
+      "dpv:hasDataRetentionPeriod": {
+        "@value": "P0D",
+        "@type": "xsd:duration"
+      },
+      "dpv:hasDataController": {
+        "@id": "https://api-staging.tessaliq.com"
+      },
+      "dpv:hasProcessingContext": "eu.europa.ec.eidas2.verifier"
+    },
+    "iss": "https://api.tessaliq.com",
+    "iat": 1778699294,
+    "jti": "3430bd53-8c19-4d06-8b14-056aca61d07b"
+  }
+}

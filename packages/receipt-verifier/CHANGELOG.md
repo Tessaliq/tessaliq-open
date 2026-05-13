@@ -5,18 +5,35 @@ All notable changes to this package are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The library is currently `0.1.0-draft`. The `-draft` suffix will be removed and
-the package promoted to `1.0.0` once a real receipt issued by an EUDI Wallet
-(through the France Identité Playground or the EU AV reference app pilot) has
-been verified end-to-end against the library — see `docs/technique/receipt-spec-v1.md` §10.
-
-## [Unreleased]
+## [1.0.0] — 2026-05-13
 
 ### Added
 
-- Contract drift detection (planned) — mirrored type test on the Tessaliq
-  signer side to catch silent divergence between the signer payload and the
-  library's `TessaliqReceiptClaims` interface (see `tessaliq` issue tracker).
+- `examples/real-receipt.json` — a real Tessaliq receipt minted by the
+  staging verifier (`api-staging.tessaliq.com`) on 2026-05-13, alongside the
+  JWKS snapshot used to sign it, for fully reproducible air-gapped
+  verification. The credential being verified was issued by the Tessaliq
+  Reusable AV (ex-Variante C) issuer and presented via the
+  [`Tessaliq/mock-wallet`](https://github.com/Tessaliq/mock-wallet) OID4VP
+  `direct_post` flow under the `eu_av_blueprint` profile.
+- `__tests__/real-receipt.test.ts` — end-to-end air-gapped verification test
+  that exercises `verifyReceipt(receipt, { jwks })` against the bundled
+  fixture, plus two negative paths (substitute key under same `kid` →
+  `invalid-signature`; wrong `expectedIssuer` → `invalid-issuer`).
+
+### Changed
+
+- Promoted from `0.1.0-draft` to `1.0.0`. The promotion gate stated in spec
+  §10 (verify a receipt issued via a real EUDI Wallet end-to-end with this
+  library) is now met by the bundled `examples/real-receipt.json` fixture
+  and the corresponding test. The spec is updated to `v1.0` in the same
+  release.
+
+### Removed
+
+- The "Deferred to v1.0" section from `0.1.0-draft` — all gating items
+  except "third-party review of the spec" are now done. External review
+  remains welcome via the issue tracker but is no longer a release gate.
 
 ## [0.1.0-draft] — 2026-04-20
 

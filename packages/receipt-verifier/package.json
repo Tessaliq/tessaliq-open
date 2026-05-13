@@ -1,6 +1,6 @@
 {
   "name": "@tessaliq/receipt-verifier",
-  "version": "0.1.0-draft",
+  "version": "1.0.0",
   "description": "Verify Tessaliq receipt JWTs cryptographically yourself, with just the public JWKS — no coordination with Tessaliq required. MIT-licensed.",
   "license": "MIT",
   "type": "module",
